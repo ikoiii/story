@@ -1,66 +1,62 @@
 import { useRef, useMemo } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-export function FloatingParticles({ count = 100 }) {
+// Soft, subtle floating particles - elegant and minimal
+export function FloatingParticles({ count = 50 }) {
   const mesh = useRef<THREE.InstancedMesh>(null);
-  const { mouse } = useThree();
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
   const particles = useMemo(() => {
     const temp = [];
     for (let i = 0; i < count; i++) {
-        temp.push({
-            t: Math.random() * 100,
-            factor: 20 + Math.random() * 100,
-            speed: 0.01 + Math.random() * 0.05,
-            xFactor: -50 + Math.random() * 100,
-            yFactor: -50 + Math.random() * 100,
-            zFactor: -50 + Math.random() * 100,
-            mx: 0,
-            my: 0
-        });
+      temp.push({
+        t: Math.random() * 100,
+        factor: 30 + Math.random() * 80,
+        speed: 0.005 + Math.random() * 0.015,
+        x: (Math.random() - 0.5) * 150,
+        y: (Math.random() - 0.5) * 100,
+        z: -30 - Math.random() * 120,
+      });
     }
     return temp;
   }, [count]);
 
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (!mesh.current) return;
 
     particles.forEach((particle, i) => {
-      let { t, factor, speed, xFactor, yFactor, zFactor } = particle;
+      let { t, factor, speed, x, y, z } = particle;
 
-      // Update time
-      t = particle.t += speed / 2;
-      const a = Math.cos(t) + Math.sin(t * 1) / 10;
-      const b = Math.sin(t) + Math.cos(t * 2) / 10;
-      const s = Math.cos(t);
-
-      // Mouse interactivity (Repel/Attract)
-      // Lerp particle mouse offset towards actual mouse
-      particle.mx += (mouse.x * 2 - particle.mx) * 0.1;
-      particle.my += (mouse.y * 2 - particle.my) * 0.1;
-
+      t = particle.t += speed;
+      
+      // Gentle floating motion
       dummy.position.set(
-        (particle.mx / 10) * a + xFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 1) * factor) / 10,
-        (particle.my / 10) * b + yFactor + Math.sin((t / 10) * factor) + (Math.cos(t * 2) * factor) / 10,
-        (particle.my / 10) * b + zFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 3) * factor) / 10
+        x + Math.sin(t * 0.5) * 2,
+        y + Math.cos(t * 0.3) * 1.5,
+        z + Math.sin(t * 0.2) * 1
       );
       
-      const scale = Math.max(0.5, Math.cos(t) * 1.5); // Twinkle size
+      // Subtle twinkling
+      const scale = 0.3 + Math.sin(t * 2) * 0.15;
       dummy.scale.setScalar(scale);
-      dummy.rotation.set(s * 5, s * 5, s * 5);
       
       dummy.updateMatrix();
       mesh.current!.setMatrixAt(i, dummy.matrix);
     });
+    
     mesh.current.instanceMatrix.needsUpdate = true;
   });
 
   return (
     <instancedMesh ref={mesh} args={[undefined, undefined, count]}>
-      <dodecahedronGeometry args={[0.05, 0]} />
-      <meshBasicMaterial color="#a0c0ff" transparent opacity={0.6} blending={THREE.AdditiveBlending} />
+      <sphereGeometry args={[0.03, 8, 8]} />
+      <meshBasicMaterial 
+        color="#aaccff"
+        transparent 
+        opacity={0.4} 
+        blending={THREE.AdditiveBlending}
+      />
     </instancedMesh>
   );
 }

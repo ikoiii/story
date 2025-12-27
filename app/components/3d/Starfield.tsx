@@ -6,77 +6,89 @@ interface StarfieldProps {
   count?: number;
 }
 
-export function Starfield({ count = 10000 }: StarfieldProps) {
+// Elegant scattered starfield with twinkling effect
+export function Starfield({ count = 12000 }: StarfieldProps) {
   const mesh = useRef<THREE.Points>(null);
+  const materialRef = useRef<THREE.PointsMaterial>(null);
 
-  const { positions, colors } = useMemo(() => {
+  const { positions, colors, sizes, twinkleFactors, twinkleSpeeds } = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
+    const sizes = new Float32Array(count);
+    const twinkleFactors = new Float32Array(count);
+    const twinkleSpeeds = new Float32Array(count);
     const color = new THREE.Color();
 
     for (let i = 0; i < count; i++) {
-        // Spiral Galaxy Distribution
-        // 3 branches
-        const branchAngle = (i % 3) * ((2 * Math.PI) / 3);
-        const radius = Math.random() * 100 + 10; 
-        const spinAngle = radius * 0.2; // more spin further out
-        
-        const randomX = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 10;
-        const randomY = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 10;
-        const randomZ = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 30; // Spread in Z
+      // Completely random uniform distribution
+      const x = (Math.random() - 0.5) * 300;
+      const y = (Math.random() - 0.5) * 200;
+      const z = -20 - Math.random() * 250;
+      
+      positions[i * 3] = x;
+      positions[i * 3 + 1] = y;
+      positions[i * 3 + 2] = z;
 
-        const rx = radius * Math.cos(branchAngle + spinAngle) + randomX;
-        const ry = (Math.random() - 0.5) * (100 - radius * 0.5) * 0.2 + randomY; // flatten near edges
-        const rz = radius * Math.sin(branchAngle + spinAngle) + randomZ - 50; 
+      // Twinkling parameters
+      twinkleFactors[i] = Math.random() * Math.PI * 2; // Random phase
+      twinkleSpeeds[i] = 0.5 + Math.random() * 2; // Random speed
 
-        positions[i * 3] = rx;
-        positions[i * 3 + 1] = ry;
-        positions[i * 3 + 2] = rz;
+      // Size variation with some brighter stars
+      const sizeRand = Math.random();
+      if (sizeRand > 0.995) {
+        sizes[i] = 0.4 + Math.random() * 0.4; // Bright stars with glow
+      } else if (sizeRand > 0.95) {
+        sizes[i] = 0.2 + Math.random() * 0.2; // Medium bright
+      } else {
+        sizes[i] = 0.05 + Math.random() * 0.1; // Small subtle
+      }
 
-        // Colors
-        // Center = Warm/Bright, Edges = Cool/Blue/Purple
-        const distRatio = radius / 100;
-        if (distRatio < 0.3) {
-             color.setHSL(Math.random() * 0.1 + 0.6, 0.8, 0.8); // Blueish white core
-        } else {
-             // Mix of Cyan (0.5), Purple (0.8), Pink (0.9)
-             const hue = Math.random() > 0.5 ? 0.5 + Math.random() * 0.1 : 0.75 + Math.random() * 0.2;
-             color.setHSL(hue, 0.6, 0.5 + Math.random() * 0.4);
-        }
-        
-        colors[i * 3] = color.r;
-        colors[i * 3 + 1] = color.g;
-        colors[i * 3 + 2] = color.b;
+      // Elegant colors
+      const colorRand = Math.random();
+      if (colorRand < 0.5) {
+        color.setHSL(0.15, 0.02 + Math.random() * 0.05, 0.85 + Math.random() * 0.1);
+      } else if (colorRand < 0.75) {
+        color.setHSL(0.12 + Math.random() * 0.03, 0.1 + Math.random() * 0.15, 0.8 + Math.random() * 0.15);
+      } else if (colorRand < 0.9) {
+        color.setHSL(0.6 + Math.random() * 0.05, 0.15 + Math.random() * 0.1, 0.8 + Math.random() * 0.15);
+      } else {
+        color.setHSL(0.08 + Math.random() * 0.04, 0.3 + Math.random() * 0.2, 0.7 + Math.random() * 0.15);
+      }
+      
+      colors[i * 3] = color.r;
+      colors[i * 3 + 1] = color.g;
+      colors[i * 3 + 2] = color.b;
     }
-    return { positions, colors };
+    
+    return { positions, colors, sizes, twinkleFactors, twinkleSpeeds };
   }, [count]);
 
   useFrame((state, delta) => {
     if (mesh.current) {
-        // Global slow rotation
-        mesh.current.rotation.y += delta * 0.05;
-        mesh.current.rotation.z += delta * 0.01;
+      mesh.current.rotation.y += delta * 0.001;
+    }
+    
+    // Twinkling effect - modulate opacity subtly
+    if (materialRef.current) {
+      const time = state.clock.elapsedTime;
+      const twinkle = 0.8 + Math.sin(time * 0.5) * 0.05;
+      materialRef.current.opacity = twinkle;
     }
   });
 
   return (
     <points ref={mesh}>
       <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          args={[positions, 3]}
-        />
-        <bufferAttribute
-          attach="attributes-color"
-          args={[colors, 3]}
-        />
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.2}
+        ref={materialRef}
+        size={0.15}
         vertexColors
         sizeAttenuation
         transparent
-        opacity={0.8}
+        opacity={0.85}
         blending={THREE.AdditiveBlending}
         depthWrite={false}
       />
