@@ -1,87 +1,72 @@
-# Welcome to React Router!
+# ✨ Candala — A Galaxy Story
 
-A modern, production-ready template for building full-stack React applications using React Router.
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
-
-## Features
-
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
-
-## Getting Started
-
-### Installation
-
-Install the dependencies:
-
-```bash
-npm install
-```
-
-### Development
-
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+> _"Beberapa hal memang ditakdirkan untuk tumbuh dari kejauhan."_
 
 ---
 
-Built with ❤️ using React Router.
+## 🌌 Tentang Candala
+
+**Candala** adalah sebuah pengalaman visual yang menggabungkan keindahan luar angkasa dengan kisah perasaan manusia yang terlalu besar untuk diucapkan, namun terlalu dalam untuk dilupakan.
+
+Di tengah hamparan bintang yang tak terhitung, planet-planet yang mengorbit dalam keheningan, dan galaksi-galaksi yang bersinar di kejauhan — ada sebuah cerita. Cerita tentang dua jiwa yang bertemu di persimpangan yang tak pernah menjanjikan arah.
+
+---
+
+## 💫 Tentang Nama
+
+**Candala** — dalam bahasa Sansekerta, berarti sesuatu yang berada di luar jangkauan, yang terpisah, yang tidak bisa disentuh.
+
+Seperti bintang yang kita lihat di langit malam. Begitu indah, begitu terang, namun selamanya berada di tempat yang tidak bisa kita raih.
+
+---
+
+## 🌠 Pengalaman
+
+Saat kamu membuka Candala, kamu akan menemukan:
+
+- **Hamparan bintang** yang berkedip lembut di kegelapan
+- **Galaksi-galaksi jauh** yang melayang di kedalaman ruang angkasa
+- **Tata surya** dengan planet-planet yang mengorbit dalam keabadian
+- **Sabuk asteroid** yang menari di antara Mars dan Jupiter
+- **Bintang jatuh** yang sesekali melintas, membawa harapan
+
+Scroll perlahan, dan biarkan cerita mengalir bersama perjalananmu melewati kosmos.
+
+---
+
+## 📖 Kisah
+
+_"Dulu, aku dan kamu bertemu di persimpangan yang tak pernah menjanjikan arah..."_
+
+Ini adalah kisah tentang:
+
+- Pertemuan yang tak terduga
+- Perasaan yang tak terucap
+- Jarak yang tak terlampaui
+- Penyesalan yang terus mengiang
+- Dan pada akhirnya... penerimaan
+
+_"Aku ingin jadi tempatmu pulang, tapi tak punya rumah untukmu singgah."_
+
+---
+
+## 🌙 Pesan
+
+Untuk kamu yang pernah merasakan:
+
+- Mencintai dari kejauhan
+- Terlalu takut untuk mendekat
+- Terlambat untuk mengatakan
+- Kehilangan sebelum sempat memiliki
+
+Candala adalah ruang untuk merasakan itu semua.
+
+Karena terkadang, hal terindah dalam hidup adalah yang tidak pernah benar-benar menjadi milik kita.
+
+---
+
+> _"Terima kasih karena sudah pernah ada."_
+
+---
+
+_Dibuat dengan ❤️ dan kerinduan._
