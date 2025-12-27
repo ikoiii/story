@@ -98,12 +98,17 @@ function DistantGalaxy({
 }
 
 // Parallax star layers - different depths move at different speeds
-export function ParallaxStars() {
+export function ParallaxStars({ isMobile = false }: { isMobile?: boolean }) {
+  // Reduce counts for mobile
+  const counts = isMobile 
+    ? { far: 1000, mid: 800, near: 600 }
+    : { far: 3000, mid: 2000, near: 1500 };
+
   return (
     <group>
-      <StarLayer count={3000} depth={-300} speed={0.0005} size={0.08} opacity={0.4} />
-      <StarLayer count={2000} depth={-200} speed={0.001} size={0.1} opacity={0.6} />
-      <StarLayer count={1500} depth={-100} speed={0.002} size={0.12} opacity={0.8} />
+      <StarLayer count={counts.far} depth={-300} speed={0.0005} size={0.08} opacity={0.4} />
+      <StarLayer count={counts.mid} depth={-200} speed={0.001} size={0.1} opacity={0.6} />
+      <StarLayer count={counts.near} depth={-100} speed={0.002} size={0.12} opacity={0.8} />
     </group>
   );
 }

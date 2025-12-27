@@ -18,9 +18,10 @@ const planets = [
 interface PlanetProps {
   planet: typeof planets[0];
   onHover?: (name: string | null, event: any) => void;
+  isMobile?: boolean;
 }
 
-function Planet({ planet, onHover }: PlanetProps) {
+function Planet({ planet, onHover, isMobile = false }: PlanetProps) {
   const ref = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const atmosphereRef = useRef<THREE.Mesh>(null);
@@ -45,6 +46,8 @@ function Planet({ planet, onHover }: PlanetProps) {
     onHover?.(null, e);
   };
 
+  const segments = isMobile ? 32 : 64;
+
   return (
     <group ref={ref}>
       <mesh 
@@ -53,7 +56,7 @@ function Planet({ planet, onHover }: PlanetProps) {
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
       >
-        <sphereGeometry args={[planet.size, 64, 64]} />
+        <sphereGeometry args={[planet.size, segments, segments]} />
         <meshStandardMaterial 
           color={planet.color} 
           emissive={planet.emissive}
@@ -62,15 +65,17 @@ function Planet({ planet, onHover }: PlanetProps) {
           metalness={0.1}
         />
         
-        <mesh ref={atmosphereRef} scale={[1.08, 1.08, 1.08]}>
-          <sphereGeometry args={[planet.size, 32, 32]} />
-          <meshBasicMaterial 
-            color={planet.color} 
-            transparent 
-            opacity={0.15} 
-            side={THREE.BackSide}
-          />
-        </mesh>
+        {!isMobile && (
+          <mesh ref={atmosphereRef} scale={[1.08, 1.08, 1.08]}>
+            <sphereGeometry args={[planet.size, 32, 32]} />
+            <meshBasicMaterial 
+              color={planet.color} 
+              transparent 
+              opacity={0.15} 
+              side={THREE.BackSide}
+            />
+          </mesh>
+        )}
 
         {planet.name === 'Saturn' && (
           <mesh rotation-x={Math.PI / 2.5}>
@@ -110,9 +115,10 @@ function Planet({ planet, onHover }: PlanetProps) {
 interface SolarSystemProps {
   position?: [number, number, number];
   onPlanetHover?: (name: string | null, event: any) => void;
+  isMobile?: boolean;
 }
 
-export function SolarSystem({ position = [0, 0, 0], onPlanetHover }: SolarSystemProps) {
+export function SolarSystem({ position = [0, 0, 0], onPlanetHover, isMobile = false }: SolarSystemProps) {
   const sunRef = useRef<THREE.Mesh>(null);
 
   useFrame((state, delta) => {
@@ -135,7 +141,7 @@ export function SolarSystem({ position = [0, 0, 0], onPlanetHover }: SolarSystem
         onPointerOver={(e) => handleSunHover(e, true)}
         onPointerOut={(e) => handleSunHover(e, false)}
       >
-        <sphereGeometry args={[8, 64, 64]} />
+        <sphereGeometry args={[8, isMobile ? 32 : 64, isMobile ? 32 : 64]} />
         <meshBasicMaterial color="#FDB813" />
         <pointLight intensity={3} distance={300} decay={2} color="#ffeecc" />
       </mesh>
@@ -149,20 +155,22 @@ export function SolarSystem({ position = [0, 0, 0], onPlanetHover }: SolarSystem
         <sphereGeometry args={[8, 32, 32]} />
         <meshBasicMaterial color="#ff6600" transparent opacity={0.2} side={THREE.BackSide} />
       </mesh>
-      <mesh scale={[1.5, 1.5, 1.5]}>
-        <sphereGeometry args={[8, 32, 32]} />
-        <meshBasicMaterial color="#ff4400" transparent opacity={0.1} side={THREE.BackSide} />
-      </mesh>
+      {!isMobile && (
+        <mesh scale={[1.5, 1.5, 1.5]}>
+          <sphereGeometry args={[8, 32, 32]} />
+          <meshBasicMaterial color="#ff4400" transparent opacity={0.1} side={THREE.BackSide} />
+        </mesh>
+      )}
 
-      {/* Asteroid Belt */}
-      <AsteroidBelt count={600} />
+      {/* Asteroid Belt - reduced on mobile */}
+      <AsteroidBelt count={isMobile ? 300 : 600} />
       
-      {/* Comet */}
-      <Comet />
+      {/* Comet - only on desktop */}
+      {!isMobile && <Comet />}
 
       {/* Planets */}
       {planets.map((p) => (
-        <Planet key={p.name} planet={p} onHover={onPlanetHover} />
+        <Planet key={p.name} planet={p} onHover={onPlanetHover} isMobile={isMobile} />
       ))}
     </group>
   );

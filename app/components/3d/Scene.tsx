@@ -5,7 +5,7 @@ import { SolarSystem } from './SolarSystem';
 import { FloatingParticles } from './FloatingParticles';
 import { ShootingStars } from './ShootingStars';
 import { DistantGalaxies, ParallaxStars, NebulaWisps, BrightStars } from './SpaceEffects';
-import { Suspense } from 'react';
+import { Suspense, useMemo, useEffect, useState } from 'react';
 import { Environment } from '@react-three/drei';
 
 interface SceneProps {
@@ -13,13 +13,27 @@ interface SceneProps {
 }
 
 export function Scene({ onPlanetHover }: SceneProps) {
-  const handlePlanetHover = (name: string | null, event: any) => {
-    if (name && event) {
-      onPlanetHover?.(name, { x: event.clientX || event.pointer?.x * window.innerWidth / 2 + window.innerWidth / 2, y: event.clientY || event.pointer?.y * window.innerHeight / 2 + window.innerHeight / 2 });
-    } else {
-      onPlanetHover?.(null, null);
-    }
-  };
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || 
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Optimized counts for mobile
+  const counts = useMemo(() => ({
+    starfield: isMobile ? 5000 : 12000,
+    distantGalaxies: isMobile ? 2 : 4,
+    nebulaWisps: isMobile ? 50 : 120,
+    brightStars: isMobile ? 8 : 15,
+    shootingStars: isMobile ? 3 : 6,
+    floatingParticles: isMobile ? 15 : 30,
+  }), [isMobile]);
 
   return (
     <div className="fixed inset-0 z-0 pointer-events-none" style={{
@@ -27,7 +41,8 @@ export function Scene({ onPlanetHover }: SceneProps) {
     }}>
       <Canvas 
         camera={{ position: [0, 5, 20], fov: 60 }} 
-        gl={{ antialias: true }}
+        gl={{ antialias: !isMobile, powerPreference: 'high-performance' }}
+        dpr={isMobile ? [1, 1.5] : [1, 2]}
       >
         <Suspense fallback={null}>
             <color attach="background" args={['#000002']} />
@@ -36,18 +51,18 @@ export function Scene({ onPlanetHover }: SceneProps) {
             <ambientLight intensity={0.06} color="#9999bb" />
             <pointLight position={[0, 0, -50]} intensity={1.2} color="#ffeedd" distance={200} />
             
-            {/* Background layers */}
-            <ParallaxStars />
-            <DistantGalaxies count={4} />
-            <NebulaWisps count={120} />
-            <Starfield />
-            <BrightStars count={15} />
-            <ShootingStars count={6} />
+            {/* Background layers - reduced on mobile */}
+            <ParallaxStars isMobile={isMobile} />
+            <DistantGalaxies count={counts.distantGalaxies} />
+            <NebulaWisps count={counts.nebulaWisps} />
+            <Starfield count={counts.starfield} />
+            <BrightStars count={counts.brightStars} />
+            <ShootingStars count={counts.shootingStars} />
             
             {/* Solar System */}
-            <SolarSystem position={[0, 0, -50]} />
+            <SolarSystem position={[0, 0, -50]} isMobile={isMobile} />
             
-            <FloatingParticles count={30} />
+            <FloatingParticles count={counts.floatingParticles} />
             <CameraRig />
             
             <Environment preset="night" />
@@ -56,4 +71,3 @@ export function Scene({ onPlanetHover }: SceneProps) {
     </div>
   );
 }
-
