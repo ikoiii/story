@@ -1,0 +1,114 @@
+.cinematic-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1.5s ease-out;
+}
+
+.cinematic-intro.black {
+  opacity: 1;
+}
+
+.cinematic-intro.black .quote-container {
+  opacity: 0;
+}
+
+.cinematic-intro.quote {
+  opacity: 1;
+}
+
+.cinematic-intro.quote .quote-container {
+  opacity: 1;
+}
+
+.cinematic-intro.fadeOut {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.quote-container {
+  text-align: center;
+  max-width: 700px;
+  padding: 2rem;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.quote-text {
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+}
+
+.quote-author {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+}
+
+.instruction {
+  position: absolute;
+  bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: fadeInInstruction 1s ease-out 4s forwards;
+}
+
+.instruction span {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+@keyframes fadeInInstruction {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Floating Quote */
+.floating-quote {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  max-width: 600px;
+  padding: 1.5rem 2rem;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+  pointer-events: none;
+}
+
+.floating-quote.visible {
+  opacity: 1;
+}
+
+.floating-quote-text {
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 0.75rem;
+}
+
+.floating-quote-author {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.1em;
+}

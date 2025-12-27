@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export function StoryOverlay() {
   return (
-    <div className="relative z-10 w-full">
+    <div className="relative z-10 w-full pointer-events-none">
       {storyData.map((section) => (
         <section
           key={section.id}
@@ -13,16 +13,17 @@ export function StoryOverlay() {
           `}
         >
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, margin: "-20%" }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className="max-w-4xl p-8 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 shadow-2xl"
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            className="max-w-2xl"
           >
             {section.text.map((paragraph, index) => (
               <p
                 key={index}
-                className="text-lg md:text-2xl text-slate-200 mb-6 leading-relaxed font-light font-serif tracking-wide last:mb-0"
+                className="text-base md:text-xl text-white/80 mb-4 leading-relaxed font-light tracking-wide last:mb-0"
+                style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}
               >
                 {paragraph}
               </p>
@@ -32,7 +33,8 @@ export function StoryOverlay() {
       ))}
       
       {/* Footer padding */}
-      <div className="h-[50vh]" />
+      <div className="h-[30vh]" />
     </div>
   );
 }
+

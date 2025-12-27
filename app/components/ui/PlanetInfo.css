@@ -1,0 +1,71 @@
+.planet-info-overlay {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  transform: translateY(10px);
+}
+
+.planet-info-overlay.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.planet-info-card {
+  background: rgba(10, 15, 30, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(100, 150, 255, 0.2);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  min-width: 200px;
+  max-width: 280px;
+}
+
+.planet-info-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.planet-info-card h3 .planet-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.planet-info-card .planet-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.planet-info-card .stat {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+
+.planet-info-card .stat-label {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.planet-info-card .stat-value {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+.planet-info-card .planet-fact {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+  font-style: italic;
+}
