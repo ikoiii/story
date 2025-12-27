@@ -1,6 +1,7 @@
 import type { Route } from "./+types/home";
 import { Scene } from "../components/3d/Scene";
 import { StoryOverlay } from "../components/ui/StoryOverlay";
+import { FullscreenToggle } from "../components/ui/FullscreenToggle";
 
 
 export function meta({}: Route.MetaArgs) {
@@ -17,6 +18,7 @@ export default function Home() {
        <div className="fixed inset-0 z-0 pointer-events-none">
           <Scene />
        </div>
+       <FullscreenToggle />
        <StoryOverlay />
     </div>
   );
