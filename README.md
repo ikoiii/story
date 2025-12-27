@@ -68,5 +68,3 @@ Karena terkadang, hal terindah dalam hidup adalah yang tidak pernah benar-benar 
 > _"Terima kasih karena sudah pernah ada."_
 
 ---
-
-_Dibuat dengan ❤️ dan kerinduan._
